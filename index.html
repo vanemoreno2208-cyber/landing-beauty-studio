@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beauty Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:   #F8BBD0;
+      --gold:   #D4AF37;
+      --dark:   #2C1A1A;
+      --gray:   #F5F5F5;
+      --muted:  #9A8A8A;
+      --white:  #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--gray); }
+    ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 3px; }
+
+    /* ─────────────────────────────
+       NAV
+    ───────────────────────────── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+    }
+
+    nav {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg { width: 16px; height: 16px; fill: white; }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: 0.03em;
+    }
+
+    .logo-text span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .btn-nav {
+      padding: 0.6rem 1.5rem;
+      background: var(--gold);
+      color: white;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-nav:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(212,175,55,0.35); }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger svg { width: 24px; height: 24px; stroke: var(--dark); }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(212,175,55,0.2);
+      padding: 1rem 1.5rem 1.5rem;
+      gap: 0;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--gold); }
+
+    .mobile-menu .btn-nav {
+      margin-top: 1rem;
+      text-align: center;
+      border-radius: 999px;
+    }
+
+    /* ─────────────────────────────
+       HERO
+    ───────────────────────────── */
+    #inicio {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: #f8ece8;
+    }
+
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(44,26,26,0.55);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem 4rem;
+      width: 100%;
+    }
+
+    .hero-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--rose);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-tag span {
+      display: inline-block;
+      width: 32px; height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-inner h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-inner h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-inner p {
+      color: rgba(255,255,255,0.75);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 1rem 2rem;
+      background: var(--gold);
+      color: white;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: filter 0.3s, box-shadow 0.3s, transform 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      padding: 1rem 2rem;
+      background: transparent;
+      color: white;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .hero-stats div { text-align: center; }
+
+    .hero-stats .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .hero-stats .lbl {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* ─────────────────────────────
+       SECTION HEADER
+    ───────────────────────────── */
+    .sec-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .sec-tag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .sec-tag span {
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+
+    .sec-header h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .sec-rule {
+      width: 56px; height: 1px;
+      background: var(--rose);
+      margin: 1.25rem auto 0;
+    }
+
+    /* ─────────────────────────────
+       SERVICES
+    ───────────────────────────── */
+    #servicios {
+      padding: 7rem 1.5rem;
+      background: white;
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid rgba(248,187,208,0.5);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 48px rgba(248,187,208,0.5);
+    }
+
+    .card-img {
+      height: 210px;
+      overflow: hidden;
+      background: #fce4ec;
+    }
+
+    .card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s;
+    }
+
+    .card:hover .card-img img { transform: scale(1.08); }
+
+    .card-body { padding: 1.5rem; }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(248,187,208,0.4);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 2; }
+
+    .card-body h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .card-body p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 1.1rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      transition: letter-spacing 0.2s;
+    }
+
+    .card-link:hover { letter-spacing: 0.28em; }
+
+    /* ─────────────────────────────
+       PROMOTIONS
+    ───────────────────────────── */
+    #promociones {
+      padding: 7rem 1.5rem;
+      background: var(--gray);
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      align-items: center;
+    }
+
+    .plan {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .plan:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+    }
+
+    .plan.featured {
+      background: var(--dark);
+      color: white;
+      transform: scale(1.04);
+    }
+
+    .plan.featured:hover { transform: scale(1.04) translateY(-6px); }
+
+    .plan-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 5px 18px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .plan h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+
+    .plan .price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .plan .period {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-left: 4px;
+    }
+
+    .plan.featured .period { color: rgba(255,255,255,0.5); }
+
+    .plan-rule {
+      height: 1px;
+      background: rgba(212,175,55,0.2);
+      margin: 1.5rem 0;
+    }
+
+    .plan.featured .plan-rule { background: rgba(255,255,255,0.15); }
+
+    .plan ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+
+    .plan ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .plan.featured ul li { color: rgba(255,255,255,0.75); }
+
+    .plan ul li::before {
+      content: "★";
+      color: var(--gold);
+      font-size: 0.65rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .btn-plan {
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-plan.rose { background: var(--rose); color: var(--dark); }
+    .btn-plan.rose:hover { filter: brightness(0.95); }
+
+    .btn-plan.gold { background: var(--gold); color: white; }
+    .btn-plan.gold:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(212,175,55,0.35); }
+
+    /* ─────────────────────────────
+       FORM
+    ───────────────────────────── */
+    #agenda {
+      padding: 7rem 1.5rem;
+      background: white;
+    }
+
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .agenda-info p.tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .agenda-info p.tag span {
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+
+    .agenda-info h2 {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+
+    .agenda-info h2 em { font-style: normal; color: var(--gold); }
+
+    .agenda-rule {
+      width: 56px; height: 1px;
+      background: var(--rose);
+      margin-bottom: 2rem;
+    }
+
+    .agenda-info > p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 1.1rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(248,187,208,0.35);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-icon svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 2; }
+
+    .contact-item span { font-size: 0.85rem; color: var(--muted); }
+
+    /* Form card */
+    .form-card {
+      background: var(--gray);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+    }
+
+    .form-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 1.75rem;
+    }
+
+    .form-group { margin-bottom: 1.1rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: white;
+      border: 1px solid rgba(248,187,208,0.7);
+      border-radius: 0.75rem;
+      padding: 0.8rem 1rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+
+    .form-group input::placeholder { color: rgba(154,138,138,0.45); }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: var(--gold);
+      color: white;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-submit:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 6px 20px rgba(212,175,55,0.35);
+    }
+
+    /* Success state */
+    .success {
+      text-align: center;
+      padding: 4rem 1rem;
+      display: none;
+    }
+
+    .success.show { display: block; }
+    .form-fields.hidden { display: none; }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--rose);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    .success-icon svg { width: 28px; height: 28px; fill: var(--gold); }
+
+    .success h3 { font-size: 1.5rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+
+    .success p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; max-width: 280px; margin: 0 auto; }
+
+    /* ─────────────────────────────
+       FOOTER
+    ───────────────────────────── */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 5rem 1.5rem 2.5rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 3rem;
+      max-width: 1280px;
+      margin: 0 auto 4rem;
+    }
+
+    .footer-brand .logo-text { color: white; font-size: 1.1rem; }
+    .footer-brand .logo-text span { color: var(--gold); }
+
+    .footer-brand > p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      max-width: 280px;
+      margin-top: 1.25rem;
+    }
+
+    .social-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      background: none;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .social-btn:hover { background: var(--gold); border-color: var(--gold); }
+
+    .social-btn svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
+
+    .footer-col h4 {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .footer-col ul a {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-col ul a:hover { color: var(--gold); }
+
+    .footer-contact-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+
+    .footer-contact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .footer-contact-list li svg {
+      width: 15px; height: 15px;
+      stroke: var(--gold); fill: none; stroke-width: 2;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-bottom p { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+
+    /* ─────────────────────────────
+       RESPONSIVE
+    ───────────────────────────── */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .plans-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+      .plan.featured { transform: scale(1); }
+      .plan.featured:hover { transform: translateY(-6px); }
+      .agenda-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links, .btn-nav { display: none; }
+      .hamburger { display: block; }
+      .services-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <nav>
+    <button class="logo" onclick="scrollTo('inicio')">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L9.5 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7.5L12 2z"/></svg>
+      </div>
+      <span class="logo-text">Beauty <span>Studio</span></span>
+    </button>
+
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#promociones">Promociones</a></li>
+      <li><a href="#agenda">Agenda</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+
+    <button class="btn-nav" onclick="scrollTo('agenda')">Agendar cita</button>
+
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+      <svg id="ham-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+        <line id="h1" x1="3" y1="6"  x2="21" y2="6"/>
+        <line id="h2" x1="3" y1="12" x2="21" y2="12"/>
+        <line id="h3" x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#inicio"      onclick="closeMenu()">Inicio</a>
+    <a href="#servicios"   onclick="closeMenu()">Servicios</a>
+    <a href="#promociones" onclick="closeMenu()">Promociones</a>
+    <a href="#agenda"      onclick="closeMenu()">Agenda</a>
+    <a href="#contacto"    onclick="closeMenu()">Contacto</a>
+    <button class="btn-nav" onclick="scrollTo('agenda');closeMenu()">Agendar cita</button>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section id="inicio">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1776482127816-98d2245d22a6?w=1600&h=900&fit=crop&auto=format"
+         alt="Beauty Studio interior elegante" />
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-inner">
+      <p class="hero-tag">
+        <span></span>Cosmetología profesional<span></span>
+      </p>
+      <h1>Resalta tu <em>belleza natural</em> con tratamientos profesionales.</h1>
+      <p>Experimenta el arte del cuidado personal con tratamientos personalizados diseñados para realzar tu piel en cada sesión.</p>
+
+      <div class="hero-btns">
+        <a href="#servicios" class="btn-primary">Conoce nuestros servicios</a>
+        <a href="#agenda"    class="btn-outline">Agendar cita →</a>
+      </div>
+
+      <div class="hero-stats">
+        <div><p class="num">500+</p><p class="lbl">Clientas felices</p></div>
+        <div><p class="num">8 años</p><p class="lbl">De experiencia</p></div>
+        <div><p class="num">4.9 ★</p><p class="lbl">Valoración</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICIOS ── -->
+<section id="servicios">
+  <div class="container">
+    <div class="sec-header">
+      <p class="sec-tag"><span></span>Lo que ofrecemos<span></span></p>
+      <h2>Nuestros Servicios</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1761718210089-ba3bb5ccb54f?w=600&h=400&fit=crop&auto=format" alt="Limpieza facial" />
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 9 9c0 4.97-9 13-9 13S3 15.97 3 11a9 9 0 0 1 9-9z"/></svg>
+            </div>
+            <h3>Limpieza Facial</h3>
+          </div>
+          <p>Eliminación profunda de impurezas para una piel luminosa y completamente revitalizada.</p>
+          <a href="#agenda" class="card-link">Agendar →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1761718209835-c8586b7dcac0?w=600&h=400&fit=crop&auto=format" alt="Hidratación facial" />
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
+            <h3>Hidratación Facial</h3>
+          </div>
+          <p>Tratamiento intensivo que restaura la humedad natural y la vitalidad de tu piel.</p>
+          <a href="#agenda" class="card-link">Agendar →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1731514771613-991a02407132?w=600&h=400&fit=crop&auto=format" alt="Tratamiento antiacné" />
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><polyline points="13 2 13 9 20 9"/><path d="M20 14.5V7l-7-7H4a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h9"/><line x1="17" y1="14" x2="17" y2="22"/><line x1="13" y1="18" x2="21" y2="18"/></svg>
+            </div>
+            <h3>Tratamiento Antiacné</h3>
+          </div>
+          <p>Protocolo especializado que reduce brotes y regula la producción de sebo de forma efectiva.</p>
+          <a href="#agenda" class="card-link">Agendar →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1519415387722-a1c3bbef716c?w=600&h=400&fit=crop&auto=format" alt="Diseño de cejas" />
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+            </div>
+            <h3>Diseño de Cejas</h3>
+          </div>
+          <p>Perfilado y definición personalizados para enmarcar tu mirada con precisión y elegancia.</p>
+          <a href="#agenda" class="card-link">Agendar →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=600&h=400&fit=crop&auto=format" alt="Masajes relajantes" />
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h3>Masajes Relajantes</h3>
+          </div>
+          <p>Sesiones terapéuticas que alivian la tensión muscular y renuevan tu energía corporal.</p>
+          <a href="#agenda" class="card-link">Agendar →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1761718210055-e83ca7e2c9ad?w=600&h=400&fit=crop&auto=format" alt="Depilación facial" />
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M6 3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3H6V3z"/><path d="M6 6l1.5 15h9L18 6"/><line x1="9" y1="11" x2="9" y2="17"/><line x1="15" y1="11" x2="15" y2="17"/></svg>
+            </div>
+            <h3>Depilación Facial</h3>
+          </div>
+          <p>Técnica suave y precisa para una piel completamente tersa, sin vello y sin irritación.</p>
+          <a href="#agenda" class="card-link">Agendar →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMOCIONES ── -->
+<section id="promociones">
+  <div class="container">
+    <div class="sec-header">
+      <p class="sec-tag"><span></span>Planes exclusivos<span></span></p>
+      <h2>Nuestras Promociones</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="plans-grid">
+
+      <div class="plan">
+        <h3>Plan Básico</h3>
+        <p><span class="price">$80.000</span><span class="period">/ sesión</span></p>
+        <div class="plan-rule"></div>
+        <ul>
+          <li>1 Limpieza facial profunda</li>
+          <li>Diseño de cejas</li>
+          <li>Hidratación express</li>
+          <li>Asesoría personalizada</li>
+        </ul>
+        <button class="btn-plan rose" onclick="scrollTo('agenda')">Elegir plan</button>
+      </div>
+
+      <div class="plan featured">
+        <div class="plan-badge">Más popular</div>
+        <h3>Plan Premium</h3>
+        <p><span class="price">$150.000</span><span class="period">/ mes</span></p>
+        <div class="plan-rule"></div>
+        <ul>
+          <li>2 Limpiezas faciales</li>
+          <li>Tratamiento antiacné</li>
+          <li>Diseño de cejas</li>
+          <li>Masaje relajante 30 min</li>
+          <li>Producto de regalo</li>
+        </ul>
+        <button class="btn-plan gold" onclick="scrollTo('agenda')">Elegir plan</button>
+      </div>
+
+      <div class="plan">
+        <h3>Plan Deluxe</h3>
+        <p><span class="price">$250.000</span><span class="period">/ mes</span></p>
+        <div class="plan-rule"></div>
+        <ul>
+          <li>4 Tratamientos faciales</li>
+          <li>Masajes relajantes</li>
+          <li>Depilación facial completa</li>
+          <li>Diseño de cejas premium</li>
+          <li>Kit de skincare incluido</li>
+          <li>Consulta prioritaria</li>
+        </ul>
+        <button class="btn-plan rose" onclick="scrollTo('agenda')">Elegir plan</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── AGENDA ── -->
+<section id="agenda">
+  <div class="container">
+    <div class="agenda-grid">
+
+      <div class="agenda-info">
+        <p class="tag"><span></span>Reserva tu espacio</p>
+        <h2>Agenda tu <em>cita ahora</em></h2>
+        <div class="agenda-rule"></div>
+        <p>Reserva tu sesión y déjate consentir por nuestras especialistas. Te contactaremos para confirmar tu horario y preparar el tratamiento ideal para tu tipo de piel.</p>
+
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.58 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span>+57 310 456 7890</span>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <span>hola@beautystudio.co</span>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span>Calle 45 #23-12, Bogotá, Colombia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-fields" id="formFields">
+          <h3>Formulario de cita</h3>
+          <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" placeholder="María García" required />
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico</label>
+              <input type="email" placeholder="maria@ejemplo.com" required />
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" placeholder="+57 300 000 0000" required />
+            </div>
+            <div class="form-group">
+              <label>Servicio</label>
+              <select required>
+                <option value="">Selecciona un servicio</option>
+                <option>Limpieza Facial</option>
+                <option>Hidratación Facial</option>
+                <option>Tratamiento Antiacné</option>
+                <option>Diseño de Cejas</option>
+                <option>Masajes Relajantes</option>
+                <option>Depilación Facial</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Fecha preferida</label>
+              <input type="date" id="dateInput" required />
+            </div>
+            <button type="submit" class="btn-submit">Agendar cita</button>
+          </form>
+        </div>
+
+        <div class="success" id="successMsg">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L9.5 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7.5L12 2z"/></svg>
+          </div>
+          <h3>¡Cita agendada!</h3>
+          <p>Pronto nos pondremos en contacto contigo para confirmar tu horario. ¡Gracias!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="contacto">
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L9.5 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7.5L12 2z"/></svg>
+        </div>
+        <span class="logo-text">Beauty <span>Studio</span></span>
+      </div>
+      <p>Tu espacio de confianza para el cuidado facial profesional. Tratamientos especializados con resultados visibles y reales.</p>
+      <div class="social-row">
+        <button class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </button>
+        <button class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </button>
+        <button class="social-btn" aria-label="Twitter">
+          <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#promociones">Promociones</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul class="footer-contact-list">
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Calle 45 #23-12, Bogotá
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.58 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +57 310 456 7890
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hola@beautystudio.co
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2024 Beauty Studio. Todos los derechos reservados.</p>
+    <p>Diseñado con ✦ para realzar tu belleza</p>
+  </div>
+</footer>
+
+<script>
+  // ── Fecha mínima en el input de fecha ──
+  document.getElementById('dateInput').min = new Date().toISOString().split('T')[0];
+
+  // ── Menú hamburguesa ──
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // ── Scroll suave personalizado ──
+  function scrollTo(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── Formulario ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('formFields').classList.add('hidden');
+    document.getElementById('successMsg').classList.add('show');
+    setTimeout(() => {
+      document.getElementById('successMsg').classList.remove('show');
+      document.getElementById('formFields').classList.remove('hidden');
+      e.target.reset();
+    }, 4000);
+  }
+
+  // ── Ocultar nav al hacer scroll hacia abajo, mostrar al subir ──
+  let lastScroll = 0;
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    const current = window.scrollY;
+    if (current > lastScroll && current > 100) {
+      header.style.transform = 'translateY(-100%)';
+      header.style.transition = 'transform 0.3s ease';
+    } else {
+      header.style.transform = 'translateY(0)';
+    }
+    lastScroll = current;
+  });
+</script>
+
+</body>
+</html>
+  
